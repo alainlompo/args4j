@@ -5,6 +5,7 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
+import java.net.InetAddress;
 import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,6 +20,9 @@ public class SampleTests {
 
     @Option(name = "-p", usage = "this is P")
     String p;
+
+    @Option(name = "-c", usage = "this is Contact data")
+    String contact;
 
     private Locale oldDefault;
 
@@ -38,6 +42,12 @@ public class SampleTests {
         CmdLineParser parser = new CmdLineParser(this);
         parser.parseArgument("-p", "125", "-h");
         assertThat(h).isTrue();
+    }
 
+    @Test(expected =  CmdLineException.class)
+    public void whenH_isProvided_butAlso_bOrC_thenNotOk() throws CmdLineException {
+        CmdLineParser parser = new CmdLineParser(this);
+        parser.parseArgument("-p", "125", "-h", "-c", "coder@coding.com");
+        assertThat(h).isTrue();
     }
 }
